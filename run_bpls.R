@@ -94,7 +94,7 @@ Qs = min(N-1,15)
 
 
 sparsity = 0
-source("./ppls_mcmcWC.R")
+source("./bpls_mcmc.R")
 Yhat = matrix(NA, nrow = Ntest, ncol = R)
 
 RMSE = rep(NA,R)
@@ -105,7 +105,7 @@ for(r in 1:R){
 
 
 sparsity = 1
-source("./ppls_mcmcWC.R")
+source("./bpls_mcmc.R")
 Yhatss = matrix(NA, nrow = Ntest, ncol = R)
 
 RMSEss = rep(NA,R)
@@ -117,7 +117,7 @@ for(r in 1:R){
 
 
 sparsity = 0
-source("./ppls_mcmc_lassoWC.R")
+source("./bpls_mcmc_lasso.R")
 YhatL = matrix(NA, nrow = Ntest, ncol = R)
 
 RMSEL = rep(NA,R)
