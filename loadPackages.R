@@ -1,0 +1,10 @@
+# load packages
+suppressPackageStartupMessages(library(chemometrics))
+suppressPackageStartupMessages(library(coda))
+suppressPackageStartupMessages(library(pls))
+suppressPackageStartupMessages(library(plot.matrix))
+suppressPackageStartupMessages(library(progress))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(reshape2))
+suppressPackageStartupMessages(library(viridis))
+suppressPackageStartupMessages(library(statmod))
