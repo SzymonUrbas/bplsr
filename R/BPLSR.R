@@ -13,8 +13,7 @@
 #' @param scale. Logical; if \code{TRUE} then the data variables will be scale to have unit variance.
 #' @param center Logical; if \code{TRUE} then the data variables will be zero-centred.
 #' @param ...   Additional arguments for \code{bplsr.predict} if \code{Xtest} is provided. 
-#' @return A list of 
-#' \describe{
+#' @return A list of:
 #' \item{\code{chain}}{A Markov chain of samples from the parameter posterior.}
 #' \item{\code{X}}{Original set of predictor variables.}
 #' \item{\code{Y}}{Original set of response variables.}
@@ -23,7 +22,6 @@
 #' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 95\%); if \code{Xtest} is provided.}
 #' \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
 #' \item{\code{diag}}{Additional diagnostics for assessing chain convergence.}
-#' }
 #' @export
 bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 						 BURN = ceiling(0.3*N_MCMC), Thin = 1, model.type = 'vanilla',
@@ -70,12 +68,10 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 #' @param model Output of \code{bplsr}.
 #' @param newdata Matrix of predictor variables to predict for. 
 #' @param PredInterval Intended coverage of prediction intervals (between 0 and 1). Setting the value to 0 only produces point predictions without prediction intervals.
-#' @return A list of 
-#' \describe{
+#' @return A list of:
 #' \item{\code{Ytest}}{Point predictions for new responses; if \code{Xtest} is provided.}
 #' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 95\%); if \code{Xtest} is provided.}
 #' \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
-#' }
 #' @export
 bplsr.predict = function(model, newdata, PredInterval = 0.95){
 	Xtest = as.matrix(newdata)
