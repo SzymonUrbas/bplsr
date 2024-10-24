@@ -14,6 +14,7 @@
 #' @param center Logical; if \code{TRUE} then the data variables will be zero-centred.
 #' @param ...   Additional arguments for \code{bplsr.predict} if \code{Xtest} is provided. 
 #' @return A list of 
+#' \describe{
 #' \item{\code{chain}}{A Markov chain of samples from the parameter posterior.}
 #' \item{\code{X}}{Original set of predictor variables.}
 #' \item{\code{Y}}{Original set of response variables.}
@@ -22,6 +23,7 @@
 #' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 95\%); if \code{Xtest} is provided.}
 #' \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
 #' \item{\code{diag}}{Additional diagnostics for assessing chain convergence.}
+#' }
 #' @export
 bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 						 BURN = ceiling(0.3*N_MCMC), Thin = 1, model.type = 'vanilla',
