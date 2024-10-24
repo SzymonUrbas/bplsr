@@ -26,7 +26,9 @@ bplsr(
 
 \item{Xtest}{Matrix of predictor variables to predict for.}
 
-\item{Prior}{List of hyperparameters specifying the parameter prior distributions. If left NULL, a generic set of priors will be generated.}
+\item{Prior}{List of hyperparameters specifying the parameter prior distributions. If left \code{NULL}, a generic set of priors will be generated.}
+
+\item{Qs}{Upper limit on the number of latent components. If \code{NULL} it is chosen automatically.}
 
 \item{N_MCMC}{Number of iterations to run the Markov chain Monte Carlo algorithm}
 
@@ -34,25 +36,25 @@ bplsr(
 
 \item{Thin}{Thinning procedure for the MArkov chain. \code{Thin = 1} results in no thinning. Only use for long chains to reduce memory.}
 
-\item{model.type}{Type of BPLS model to use; one of \code{vanilla}, \code{ss} (spike-and-slab), or \text{LASSO}}
+\item{model.type}{Type of BPLS model to use; one of \code{vanilla}, \code{ss} (spike-and-slab), or \code{LASSO}}
 
 \item{scale.}{Logical; if \code{TRUE} then the data variables will be scale to have unit variance.}
 
-\item{...}{Additional arguments for \code{bplsr.predict} if \code{Xtest} is provided.}
+\item{center.}{Logical; if \code{TRUE} then the data variables will be zero-centred.}
 
-\item{center}{Logical; if \code{TRUE} then the data variables will be zero-centred.}
+\item{...}{Additional arguments for \code{bplsr.predict} if \code{Xtest} is provided.}
 }
 \value{
-A list of
+A list of:
 \item{\code{chain}}{A Markov chain of samples from the parameter posterior.}
 \item{\code{X}}{Original set of predictor variables.}
 \item{\code{Y}}{Original set of response variables.}
 \item{\code{Xtest}}{Original set of predictor variables to predict from; if \code{Xtest} is provided.}
 \item{\code{Ytest}}{Point predictions for new responses; if \code{Xtest} is provided.}
-\item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 95\\%); if \code{Xtest} is provided.}
+\item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 0.95 coverage); if \code{Xtest} is provided.}
 \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
 \item{\code{diag}}{Additional diagnostics for assessing chain convergence.}
 }
 \description{
-Run the BPLS regression model
+Carries out inference of the BPLS regression model using a Gibbs sampler
 }

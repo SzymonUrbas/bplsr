@@ -1,17 +1,18 @@
 #' Run the BPLS regression model
 #'
-#'
+#' Carries out inference of the BPLS regression model using a Gibbs sampler
 #' 
 #' @param X Matrix of predictor variables.
 #' @param Y Vector or matrix of responses.
 #' @param Xtest Matrix of predictor variables to predict for. 
-#' @param Prior 	List of hyperparameters specifying the parameter prior distributions. If left NULL, a generic set of priors will be generated.
+#' @param Prior 	List of hyperparameters specifying the parameter prior distributions. If left \code{NULL}, a generic set of priors will be generated.
+#' @param Qs Upper limit on the number of latent components. If \code{NULL} it is chosen automatically.
 #' @param N_MCMC 	Number of iterations to run the Markov chain Monte Carlo algorithm
 #' @param BURN 	Number of iteration to be discarded as the burn-in.
 #' @param Thin Thinning procedure for the MArkov chain. \code{Thin = 1} results in no thinning. Only use for long chains to reduce memory.
-#' @param model.type Type of BPLS model to use; one of \code{vanilla}, \code{ss} (spike-and-slab), or \text{LASSO}
+#' @param model.type Type of BPLS model to use; one of \code{vanilla}, \code{ss} (spike-and-slab), or \code{LASSO}
 #' @param scale. Logical; if \code{TRUE} then the data variables will be scale to have unit variance.
-#' @param center Logical; if \code{TRUE} then the data variables will be zero-centred.
+#' @param center. Logical; if \code{TRUE} then the data variables will be zero-centred.
 #' @param ...   Additional arguments for \code{bplsr.predict} if \code{Xtest} is provided. 
 #' @return A list of:
 #' \item{\code{chain}}{A Markov chain of samples from the parameter posterior.}
@@ -19,7 +20,7 @@
 #' \item{\code{Y}}{Original set of response variables.}
 #' \item{\code{Xtest}}{Original set of predictor variables to predict from; if \code{Xtest} is provided.}
 #' \item{\code{Ytest}}{Point predictions for new responses; if \code{Xtest} is provided.}
-#' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 95\%); if \code{Xtest} is provided.}
+#' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 0.95 coverage); if \code{Xtest} is provided.}
 #' \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
 #' \item{\code{diag}}{Additional diagnostics for assessing chain convergence.}
 #' @export
@@ -65,19 +66,22 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 }
 
 #' Predict from a fitted BPLS regression model
+#' 
+#' Generates predictions from the fitted BPLS regression model using Monte Carlo simulation
+#'
 #' @param model Output of \code{bplsr}.
 #' @param newdata Matrix of predictor variables to predict for. 
 #' @param PredInterval Intended coverage of prediction intervals (between 0 and 1). Setting the value to 0 only produces point predictions without prediction intervals.
 #' @return A list of:
 #' \item{\code{Ytest}}{Point predictions for new responses; if \code{Xtest} is provided.}
-#' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 95\%); if \code{Xtest} is provided.}
+#' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 0.95 coverage); if \code{Xtest} is provided.}
 #' \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
 #' @export
 bplsr.predict = function(model, newdata, PredInterval = 0.95){
 	Xtest = as.matrix(newdata)
-	Xtest = scale(Xtest, center=model$standards$muX,scale = model$standards$sdX)
+	Xtest. = scale(Xtest, center=model$standards$muX,scale = model$standards$sdX)
 	R = nrow(model$chain[[1]]$C)
-	EYtmp = matrix(0, nrow = nrow(Xtest), ncol = R)
+	EYtmp = matrix(0, nrow = nrow(Xtest.), ncol = R)
 	storeY = array(NA, dim = c(nrow(Xtest.),R,length(model$chain)))
 
 
@@ -86,7 +90,7 @@ bplsr.predict = function(model, newdata, PredInterval = 0.95){
 		format = "Prediction:  [:bar] :percent .. :eta",total = length(model$chain),
 		clear = FALSE, width= 40)
 	for(iter in seq_along(model$chain)){
-		tmp = SampleYpred(Xtest,model$chain[[iter]])
+		tmp = SampleYpred(Xtest.,model$chain[[iter]])
 		EYtmp = EYtmp + tmp$EYpred
 		storeY[,,iter] = InvScale(tmp$Ypred,
 				 center. = model$standards$muY, scale. = model$standards$sdY)
@@ -162,7 +166,7 @@ bplsrMCMC = function(X,Y, Xtest = NULL, Prior = NULL, N_MCMC = 1e3, BURN = 0.3*N
 			format = "Diagnostics:  [:bar] :percent .. :eta",total = length(StoreIdx),
 			clear = FALSE, width= 40)
 		for(iter in seq_along(StorePars)){
-			tmp = SampleYpred(Xpred = Xtest.,small_pars = StorePars[[iter]],sampleY = FALSE)
+			tmp = SampleYpred(Xpred = Xtest.,small_pars = StorePars[[iter]],SampleY = FALSE)
 			storeEY[iter,] = standards$muY + standards$sdY*as.vector(tmp$EYpred)
 			pb$tick()
 		}
@@ -287,7 +291,7 @@ ssBPLS_mcmc_kernel=function(X, Y, pars, Prior){
     for(j in 1:pars$Qs){
 		gam = 1-2*pars$Bvec[j]
 
-		tSUM_RESID = t(Y - tcrossprod(Z,pars$CB))# Z%*%t(pars$CB))
+		tSUM_RESID = t(Y - tcrossprod(pars$Z,pars$CB))# Z%*%t(pars$CB))
 
 		# delta = t(C[,j])%*%PSIinv%*% (C[,j]*ZtZ[j,j] - 2*gam*tSUM_RESID%*%Zcurr[,j])
 		delta = crossprod(pars$C[,j] /pars$Psi2, pars$C[,j]*ZtZ[j,j] - 2*gam*tSUM_RESID%*%pars$Z[,j])

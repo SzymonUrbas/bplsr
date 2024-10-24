@@ -1,5 +1,5 @@
 Package: bplsr
-Title: What the Package Does (One Line, Title Case)
+Title: Bayesian partial least squares regression
 Version: 0.0.0.9000
 Authors@R: 
     person("Szymon", "Urbas", , "szymon.urbas@ucd.ie", role = c("aut", "cre"))
@@ -15,4 +15,6 @@ LazyData: true
 Imports: 
     coda,
     progress,
-    statmod
+    statmod,
+    stats,
+    utils

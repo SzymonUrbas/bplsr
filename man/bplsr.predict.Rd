@@ -14,11 +14,11 @@ bplsr.predict(model, newdata, PredInterval = 0.95)
 \item{PredInterval}{Intended coverage of prediction intervals (between 0 and 1). Setting the value to 0 only produces point predictions without prediction intervals.}
 }
 \value{
-A list of
+A list of:
 \item{\code{Ytest}}{Point predictions for new responses; if \code{Xtest} is provided.}
-\item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 95\\%); if \code{Xtest} is provided.}
+\item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 0.95 coverage); if \code{Xtest} is provided.}
 \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
 }
 \description{
-Predict from a fitted BPLS regression model
+Generates predictions from the fitted BPLS regression model using Monte Carlo simulation
 }
