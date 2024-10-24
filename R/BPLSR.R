@@ -71,9 +71,11 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 #' @param newdata Matrix of predictor variables to predict for. 
 #' @param PredInterval Intended coverage of prediction intervals (between 0 and 1). Setting the value to 0 only produces point predictions without prediction intervals.
 #' @return A list of 
+#' \describe{
 #' \item{\code{Ytest}}{Point predictions for new responses; if \code{Xtest} is provided.}
 #' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 95\%); if \code{Xtest} is provided.}
 #' \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
+#' }
 #' @export
 bplsr.predict = function(model, newdata, PredInterval = 0.95){
 	Xtest = as.matrix(newdata)
