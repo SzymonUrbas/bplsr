@@ -1,0 +1,23 @@
+Package: bplsr
+Title: Bayesian partial least squares regression
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Szymon", "Urbas", , "szymon.urbas@ucd.ie", role = c("aut", "cre")),
+    person("Szymon2", "Urbas2", , "szymon.urbas@ucd.ie2", role = "aut")
+  )
+Description: Fits the Bayesian partial least squares regression model
+    introduced in Urbas et al. (2024+).
+License: GPL (>= 3)
+Encoding: UTF-8
+Language: eng
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: 
+    R (>= 2.10)
+LazyData: true
+Imports: 
+    coda,
+    progress,
+    statmod,
+    stats,
+    utils
