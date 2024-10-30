@@ -5,18 +5,25 @@
 \alias{milk_MIR}
 \title{Milk traits and corresponding mid-infrared spectra}
 \format{
-A list of 3 dataframes:
+Data of 431 dairy milk samples with variables split into a list of 3 data frames:
+\describe{
+\item{\code{info}}{Information variables on the samples.}
+\item{\code{xMIR}}{531 spectral measurements in the mid-infrared region (predictors). Noisy water-regions have been removed.}
+\item{\code{yTraits}}{45 chemical and technological traits (responses); contains missing values.}
+}
 }
 \usage{
 data(milk_MIR)
 }
 \description{
-Data containing spectral measurements for XX milk samples originating from XX cows along with various chemical and technological traits measures.
+Data containing spectral measurements for 431 milk samples with various chemical and technological traits measures. Details can be found in Visentin et al. (2015) and McDermot et al. (2016).
 }
 \examples{
 data(milk_MIR, package="bplsr")
 }
 \references{
-Streuli, H. (1973). Der heutige Stand der Kaffee-Chemie, In \emph{Proceedings of the 6th International Colloquium on Coffee Chemistry}, June 4-June 9, 1973, Bogata, Colombia, pp. 61-72. Paris, France: Association Scientifique International du Café (ASIC).
+McDermott, A., Visentin, G., De Marchi, M., Berry, D., Fenelon, M., O'connor, P., Kenny, O., and McParland, S. (2016). Prediction of individual milk proteins including free amino acids in bovine milk using mid-infrared spectroscopy and their correlations with milk processing characteristics. \emph{Journal of Dairy Science, 99(4):3171–3182.}
+
+Visentin, G., McDermott, A., McParland, S., Berry, D., Kenny, O., Brodkorb, A., Fenelon, M., and De Marchi, M. (2015). Prediction of bovine milk technological traits from midinfrared spectroscopy analysis in dairy cows. \emph{Journal of Dairy Science}, 98(9):6620–6629.
 }
 \keyword{datasets}

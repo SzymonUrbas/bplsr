@@ -10,9 +10,13 @@ Fits the Bayesian partial least squares regression model introduced in Urbas et 
 \author{
 \strong{Maintainer}: Szymon Urbas \email{szymon.urbas@ucd.ie}
 
-Authors:
+Other contributors:
 \itemize{
-  \item Szymon2 Urbas2 \email{szymon.urbas@ucd.ie2}
+  \item Pierre Lovera [contributor]
+  \item Robert Daly [contributor]
+  \item Alan O'Riordan [contributor]
+  \item Donagh Berry [contributor]
+  \item Isobel Claire Gormley [contributor]
 }
 
 }
