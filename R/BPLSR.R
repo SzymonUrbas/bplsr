@@ -13,7 +13,7 @@
 #' @param model.type Type of BPLS model to use; one of \code{vanilla}, \code{ss} (spike-and-slab), or \code{LASSO}
 #' @param scale. Logical; if \code{TRUE} then the data variables will be scale to have unit variance.
 #' @param center. Logical; if \code{TRUE} then the data variables will be zero-centred.
-#' @param ...   Additional arguments for \code{bplsr.predict} if \code{Xtest} is provided. 
+#' @param PredInterval   Coverage of prediction intervals if \code{Xtest} is provided; 0.95 by default. 
 #' @return A list of:
 #' \item{\code{chain}}{A Markov chain of samples from the parameter posterior.}
 #' \item{\code{X}}{Original set of predictor variables.}
@@ -26,7 +26,7 @@
 #' @export
 bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 						 BURN = ceiling(0.3*N_MCMC), Thin = 1, model.type = 'vanilla',
-						 scale. = TRUE, center. = TRUE,...){
+						 scale. = TRUE, center. = TRUE, PredInterval = 0.95){
 
 	if(is.null(Prior)){
 		Prior = list(Asig= 2.5, Bsig=0.1, Apsi = 2.5, Bpsi = 1.5, Alam = 1.5, Blam = 1.5,
@@ -49,13 +49,13 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 	
 	if(model.type == 'ss'){
 		Out = bplsrMCMC(X., Y. , Xtest, Prior, N_MCMC, BURN, Thin,
-			model.type,mcmc.kernel = ssBPLS_mcmc_kernel,standards,...)
+			model.type,mcmc.kernel = ssBPLS_mcmc_kernel,standards,PredInterval)
 	} else if(model.type == 'LASSO'){
 		Out = bplsrMCMC(X., Y. , Xtest, Prior, N_MCMC, BURN, Thin,
-			model.type,mcmc.kernel = LBPLS_mcmc_kernel,standards,...)
+			model.type,mcmc.kernel = LBPLS_mcmc_kernel,standards,PredInterval)
 	} else if(model.type == 'vanilla'){
 		Out = bplsrMCMC(X., Y. , Xtest, Prior, N_MCMC, BURN, Thin,
-			model.type,mcmc.kernel = BPLS_mcmc_kernel,standards,...)
+			model.type,mcmc.kernel = BPLS_mcmc_kernel,standards,PredInterval)
 	}
 	Out$Xtrain = X
 	Out$Ytrain = Y
@@ -174,7 +174,7 @@ bplsrMCMC = function(X,Y, Xtest = NULL, Prior = NULL, N_MCMC = 1e3, BURN = 0.3*N
 		ess = bplsr.getESS(storeEY)
 
 		tmp_list = bplsr.predict(list(chain = StorePars, standards = standards),
-						Xtest,...)
+						Xtest,PredInterval = PredInterval)
 		EYtest = tmp_list$EYtest
 		Ytest_PI = tmp_list$Ytest_PI
 		storeY = tmp_list$Ytest_dist

@@ -5,10 +5,15 @@
 \alias{bplsr-package}
 \title{bplsr: Bayesian partial least squares regression}
 \description{
-What the package does (one paragraph).
+Fits the Bayesian partial least squares regression model introduced in Urbas et al. (2024+).
 }
 \author{
 \strong{Maintainer}: Szymon Urbas \email{szymon.urbas@ucd.ie}
+
+Authors:
+\itemize{
+  \item Szymon2 Urbas2 \email{szymon.urbas@ucd.ie2}
+}
 
 }
 \keyword{internal}

@@ -16,7 +16,7 @@ bplsr(
   model.type = "vanilla",
   scale. = TRUE,
   center. = TRUE,
-  ...
+  PredInterval = 0.95
 )
 }
 \arguments{
@@ -42,7 +42,7 @@ bplsr(
 
 \item{center.}{Logical; if \code{TRUE} then the data variables will be zero-centred.}
 
-\item{...}{Additional arguments for \code{bplsr.predict} if \code{Xtest} is provided.}
+\item{PredInterval}{Coverage of prediction intervals if \code{Xtest} is provided; 0.95 by default.}
 }
 \value{
 A list of:
