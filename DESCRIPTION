@@ -3,7 +3,11 @@ Title: Bayesian partial least squares regression
 Version: 0.0.0.9000
 Authors@R: c(
     person("Szymon", "Urbas", , "szymon.urbas@ucd.ie", role = c("aut", "cre")),
-    person("Szymon2", "Urbas2", , "szymon.urbas@ucd.ie2", role = "aut")
+    person("Pierre", "Lovera", role = "ctb"),
+    person("Robert", "Daly", role = "ctb"),
+    person("Alan", "O'Riordan", role = "ctb"),
+    person("Donagh", "Berry", role = "ctb"),
+    person("Isobel Claire", "Gormley", role = "ctb")
   )
 Description: Fits the Bayesian partial least squares regression model
     introduced in Urbas et al. (2024+).
