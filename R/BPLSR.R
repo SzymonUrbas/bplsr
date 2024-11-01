@@ -1,19 +1,31 @@
 #' Run the BPLS regression model
 #'
-#' Carries out inference of the BPLS regression model using a Gibbs sampler
+#' Posterior inference of the Bayesian partial least squares regression model using a Gibbs sampler. There are three types of models available depending on the assumed prior structure on the model parameters (see details)
 #' 
 #' @param X Matrix of predictor variables.
 #' @param Y Vector or matrix of responses.
 #' @param Xtest Matrix of predictor variables to predict for. 
 #' @param Prior 	List of hyperparameters specifying the parameter prior distributions. If left \code{NULL}, a generic set of priors will be generated.
 #' @param Qs Upper limit on the number of latent components. If \code{NULL} it is chosen automatically.
-#' @param N_MCMC 	Number of iterations to run the Markov chain Monte Carlo algorithm
+#' @param N_MCMC 	Number of iterations to run the Markov chain Monte Carlo algorithm.
 #' @param BURN 	Number of iteration to be discarded as the burn-in.
 #' @param Thin Thinning procedure for the MArkov chain. \code{Thin = 1} results in no thinning. Only use for long chains to reduce memory.
-#' @param model.type Type of BPLS model to use; one of \code{vanilla}, \code{ss} (spike-and-slab), or \code{LASSO}
+#' @param model.type Type of BPLS model to use; one of \code{standard}, \code{ss} (spike-and-slab), or \code{LASSO} (see details).
 #' @param scale. Logical; if \code{TRUE} then the data variables will be scale to have unit variance.
 #' @param center. Logical; if \code{TRUE} then the data variables will be zero-centred.
 #' @param PredInterval   Coverage of prediction intervals if \code{Xtest} is provided; 0.95 by default. 
+#' @details The number of latent variables is inferred using the multiplicative gamma process prior (ref).
+#' Posterior samples from the fitted model are stored as a list.
+#' There are three types of parameter prior structures resulting in three different model types:
+#' \itemize{
+#' \item{BPLS}{No additional structure assumed; set \code{model.type=standard}. This model mimics the standard partial least squares regression (PLS; CITE)}
+#' \item{ss-BPLS}{A spike-and-slab variant introducing additonal column-wise sparsity to the loading matrix relating to the response variables \code{Y}; set \code{model.type=ss}. This approach mimics the Two-way Orthogonal PLS regression (O2PLS; Trygg and Wold, 2003).}
+#' \item{L-BPLS}{A LASSO variant introducing additonal element-wise sparsity to the loading matrix relating to the response variables \code{Y}; set \code{model.type=LASSO}. This approach mimics the sparse PLS regression (sPLS; Chun and Keles, 2010).}
+#' }
+#' @references Chun, H. and Keles, S. (2010). Sparse partial least squares regression for simultaneous dimension reduction and variable selection. \emph{Journal of the Royal Statistical Society: Series B (Statistical Methodology)}, 72(1):3–25.
+#' Trygg, J. and Wold, S. (2003). O2-PLS, a two-block (X–Y) latent variable regression (LVR) method with an integral OSC filter. \emph{Journal of Chemometrics}, 17(1):53–64.
+#' Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024+). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." \emph{The Annals of Applied Statistics}, to appear. URL \code{https://arxiv.org/abs/2307.04457}
+#' Wold, H. (1973). Nonlinear iterative partial least squares (NIPALS) modelling: some current developments. In \emph{Multivariate analysis–III}, pages 383–407. Elsevier.
 #' @return A list of:
 #' \item{\code{chain}}{A Markov chain of samples from the parameter posterior.}
 #' \item{\code{X}}{Original set of predictor variables.}
@@ -25,7 +37,7 @@
 #' \item{\code{diag}}{Additional diagnostics for assessing chain convergence.}
 #' @export
 bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
-						 BURN = ceiling(0.3*N_MCMC), Thin = 1, model.type = 'vanilla',
+						 BURN = ceiling(0.3*N_MCMC), Thin = 1, model.type = 'standard',
 						 scale. = TRUE, center. = TRUE, PredInterval = 0.95){
 
 	if(is.null(Prior)){
@@ -53,7 +65,7 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 	} else if(model.type == 'LASSO'){
 		Out = bplsrMCMC(X., Y. , Xtest, Prior, N_MCMC, BURN, Thin,
 			model.type,mcmc.kernel = LBPLS_mcmc_kernel,standards,PredInterval)
-	} else if(model.type == 'vanilla'){
+	} else if(model.type == 'standard'){
 		Out = bplsrMCMC(X., Y. , Xtest, Prior, N_MCMC, BURN, Thin,
 			model.type,mcmc.kernel = BPLS_mcmc_kernel,standards,PredInterval)
 	}
@@ -67,11 +79,13 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 
 #' Predict from a fitted BPLS regression model
 #' 
-#' Generates predictions from the fitted BPLS regression model using Monte Carlo simulation
+#' Generates predictions from the fitted BPLS regression model using Monte Carlo simulation.
 #'
 #' @param model Output of \code{bplsr}.
 #' @param newdata Matrix of predictor variables to predict for. 
 #' @param PredInterval Intended coverage of prediction intervals (between 0 and 1). Setting the value to 0 only produces point predictions without prediction intervals.
+#' @details Predictions of the responses are generated from the posterior predictive distribution, marginalising out the model parameters; see Section 3.5 of Urbas et Al. (2024+).
+#' @references Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024+). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." The Annals of Applied Statistics, to appear. URL \code{https://arxiv.org/abs/2307.04457}
 #' @return A list of:
 #' \item{\code{Ytest}}{Point predictions for new responses; if \code{Xtest} is provided.}
 #' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 0.95 coverage); if \code{Xtest} is provided.}
@@ -535,7 +549,7 @@ INITbplsr = function(X, Y, Prior,Qs = 0, isoX = FALSE, isoY = FALSE,
 	    			isoX = isoX, isoY = isoY, Qs = Qs, I_Qs = diag(Qs)))
 
     } 
-    if(model.type == 'vanilla') {
+    if(model.type == 'standard') {
 	    phiW = rgamma(P*Qs,Prior$nuW[1],Prior$nuW[2]) 
 	    phiC = rgamma(R*Qs,Prior$nuC[1],Prior$nuC[2])
 

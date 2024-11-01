@@ -13,7 +13,7 @@ bplsr(
   N_MCMC = 20000,
   BURN = ceiling(0.3 * N_MCMC),
   Thin = 1,
-  model.type = "vanilla",
+  model.type = "standard",
   scale. = TRUE,
   center. = TRUE,
   PredInterval = 0.95
@@ -30,13 +30,13 @@ bplsr(
 
 \item{Qs}{Upper limit on the number of latent components. If \code{NULL} it is chosen automatically.}
 
-\item{N_MCMC}{Number of iterations to run the Markov chain Monte Carlo algorithm}
+\item{N_MCMC}{Number of iterations to run the Markov chain Monte Carlo algorithm.}
 
 \item{BURN}{Number of iteration to be discarded as the burn-in.}
 
 \item{Thin}{Thinning procedure for the MArkov chain. \code{Thin = 1} results in no thinning. Only use for long chains to reduce memory.}
 
-\item{model.type}{Type of BPLS model to use; one of \code{vanilla}, \code{ss} (spike-and-slab), or \code{LASSO}}
+\item{model.type}{Type of BPLS model to use; one of \code{standard}, \code{ss} (spike-and-slab), or \code{LASSO} (see details).}
 
 \item{scale.}{Logical; if \code{TRUE} then the data variables will be scale to have unit variance.}
 
@@ -56,5 +56,21 @@ A list of:
 \item{\code{diag}}{Additional diagnostics for assessing chain convergence.}
 }
 \description{
-Carries out inference of the BPLS regression model using a Gibbs sampler
+Posterior inference of the Bayesian partial least squares regression model using a Gibbs sampler. There are three types of models available depending on the assumed prior structure on the model parameters (see details)
+}
+\details{
+The number of latent variables is inferred using the multiplicative gamma process prior (ref).
+Posterior samples from the fitted model are stored as a list.
+There are three types of parameter prior structures resulting in three different model types:
+\itemize{
+\item{BPLS}{No additional structure assumed; set \code{model.type=standard}. This model mimics the standard partial least squares regression (PLS; CITE)}
+\item{ss-BPLS}{A spike-and-slab variant introducing additonal column-wise sparsity to the loading matrix relating to the response variables \code{Y}; set \code{model.type=ss}. This approach mimics the Two-way Orthogonal PLS regression (O2PLS; Trygg and Wold, 2003).}
+\item{L-BPLS}{A LASSO variant introducing additonal element-wise sparsity to the loading matrix relating to the response variables \code{Y}; set \code{model.type=LASSO}. This approach mimics the sparse PLS regression (sPLS; Chun and Keles, 2010).}
+}
+}
+\references{
+Chun, H. and Keles, S. (2010). Sparse partial least squares regression for simultaneous dimension reduction and variable selection. \emph{Journal of the Royal Statistical Society: Series B (Statistical Methodology)}, 72(1):3–25.
+Trygg, J. and Wold, S. (2003). O2-PLS, a two-block (X–Y) latent variable regression (LVR) method with an integral OSC filter. \emph{Journal of Chemometrics}, 17(1):53–64.
+Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024+). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." \emph{The Annals of Applied Statistics}, to appear. URL \code{https://arxiv.org/abs/2307.04457}
+Wold, H. (1973). Nonlinear iterative partial least squares (NIPALS) modelling: some current developments. In \emph{Multivariate analysis–III}, pages 383–407. Elsevier.
 }
