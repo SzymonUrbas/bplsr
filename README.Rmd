@@ -1,0 +1,66 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# bplsr
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The `bplsr` package implements the Bayesian partial least squares regression model. It is a Bayesian factor model which emulates the partial least squares (PLS) method.
+
+## Installation
+
+``` r
+# install.packages("devtools")
+devtools::install_github("SzymonUrbas/bplsr")
+```
+
+## Example
+
+The following example illustrates how to carry out multivariate regression using BPLS:
+
+```{r example}
+library(bplsr)
+
+
+X = milk_MIR$xMIR
+Y = milk_MIR$yTraits[, c('Casein_content','Fat_content')]
+
+set.seed(1)
+# fit model to 75% of data and predict on remaining 25%
+idx = sample(seq(nrow(X)),floor(nrow(X)*0.75),replace = FALSE)
+
+Xtrain = X[idx,];Ytrain = Y[idx,]
+
+Xtest = X[-idx,];Ytest = Y[-idx,]
+
+bplsr_Fit = bplsr(Xtrain,Ytrain)
+
+bplsr_pred = bplsr.predict(model = bplsr_Fit, newdata = Xtest)
+
+# point predictions
+head(bplsr_pred$Ytest)
+
+# lower and upper limits of prediction interval
+head(bplsr_pred$Ytest_PI)
+
+# plot of predictive posterior distribution for single test sample
+hist(bplsr_pred$Ytest_dist[1,'Casein_content',])
+
+```
+
+
+### References
+Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." _The Annals of Applied Statistics_, 18(4): 3486-3506 [doi:10.1214/24-AOAS1947](https://doi.org/10.1214/24-AOAS1947)

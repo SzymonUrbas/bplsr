@@ -40,6 +40,12 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 						 BURN = ceiling(0.3*N_MCMC), Thin = 1, model.type = 'standard',
 						 scale. = TRUE, center. = TRUE, PredInterval = 0.95){
 
+	if(any(is.na(X))){
+		stop('The X matrix contains missing values.')
+	}
+	if(any(is.na(Y))){
+		stop('The Y matrix/vector contains missing values.')
+	}
 	if(is.null(Prior)){
 		Prior = list(Asig= 2.5, Bsig=0.1, Apsi = 2.5, Bpsi = 1.5, Alam = 1.5, Blam = 1.5,
 				nuW = c(2,3), nuC = c(2,3), alpha = c(2.2,2.2), beta = c(1,1))
@@ -110,6 +116,7 @@ bplsr.predict = function(model, newdata, PredInterval = 0.95){
 				 center. = model$standards$muY, scale. = model$standards$sdY)
 		pb$tick()
 	}
+	dimnames(storeY)[[2]] = model$standards$namesY
 	EYtest = InvScale(EYtmp/length(model$chain),
 				 center. = model$standards$muY, scale. = model$standards$sdY)
 
