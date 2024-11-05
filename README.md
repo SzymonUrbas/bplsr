@@ -8,7 +8,7 @@
 
 The `bplsr` package implements the Bayesian partial least squares
 regression model. It is a Bayesian factor model which emulates the
-partial least squares (PLS) method.
+partial least squares (PLS) method. See Urbas et al. (2024) for details.
 
 ## Installation
 
@@ -20,7 +20,7 @@ devtools::install_github("SzymonUrbas/bplsr")
 ## Example
 
 The following example illustrates how to carry out multivariate
-regression using BPLS:
+regression using BPLS on mid-infrared spectral data of milk samples:
 
 ``` r
 library(bplsr)
@@ -34,11 +34,12 @@ set.seed(1)
 idx = sample(seq(nrow(X)),floor(nrow(X)*0.75),replace = FALSE)
 
 Xtrain = X[idx,];Ytrain = Y[idx,]
-
 Xtest = X[-idx,];Ytest = Y[-idx,]
 
+# fit the model (MCMC takes time)
 bplsr_Fit = bplsr(Xtrain,Ytrain)
 
+# generate predictions
 bplsr_pred = bplsr.predict(model = bplsr_Fit, newdata = Xtest)
 
 # point predictions
@@ -74,7 +75,8 @@ head(bplsr_pred$Ytest_PI)
 #> [6,]       3.023982    5.269628
 
 # plot of predictive posterior distribution for single test sample
-hist(bplsr_pred$Ytest_dist[1,'Casein_content',])
+hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = F,
+     main = 'Posterior predictive density', xlab = 'Casein_content')
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
