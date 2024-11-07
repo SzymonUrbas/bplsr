@@ -59,7 +59,7 @@ head(bplsr_pred$Ytest_PI)
 
 # plot of predictive posterior distribution for single test sample
 hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = F,
-     main = 'Posterior predictive density', xlab = 'Casein_content')
+     main = 'Posterior predictive distribution', xlab = 'Casein_content')
 
 ```
 
