@@ -26,5 +26,5 @@ Generates predictions from the fitted BPLS regression model using Monte Carlo si
 Predictions of the responses are generated from the posterior predictive distribution, marginalising out the model parameters; see Section 3.5 of Urbas et Al. (2024+).
 }
 \references{
-Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024+). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." The Annals of Applied Statistics, to appear. URL \code{https://arxiv.org/abs/2307.04457}
+Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." \emph{The Annals of Applied Statistics}, 18(4): 3486-3506. \if{html}{\out{<\doi{10.1214/24-AOAS1947}>}}
 }
