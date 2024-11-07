@@ -2,15 +2,17 @@ Package: bplsr
 Title: Bayesian partial least squares regression
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Szymon", "Urbas", , "szymon.urbas@ucd.ie", role = c("aut", "cre")),
+    person("Szymon", "Urbas", , "szymon.urbas@umu.ie", role = c("aut", "cre")),
     person("Pierre", "Lovera", role = "ctb"),
     person("Robert", "Daly", role = "ctb"),
     person("Alan", "O'Riordan", role = "ctb"),
     person("Donagh", "Berry", role = "ctb"),
     person("Isobel Claire", "Gormley", role = "ctb")
   )
+Maintainer: Szymon Urbas <szymon.urbas@mu.ie>
 Description: Fits the Bayesian partial least squares regression model
-    introduced in Urbas et al. (2024+).
+    introduced in Urbas et al. (2024) <doi:10.1214/24-AOAS1947>. Suitable
+    for univariate and multivariate regression with high-dimensional data.
 License: GPL (>= 3)
 Encoding: UTF-8
 Language: eng
