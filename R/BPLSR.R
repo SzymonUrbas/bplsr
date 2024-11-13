@@ -17,16 +17,19 @@
 #' @details The number of latent variables is inferred using the multiplicative gamma process prior (Bhattacharya and Dunson, 2011).
 #' Posterior samples from the fitted model are stored as a list.
 #' There are three types of parameter prior structures resulting in three different model types:
-#' \itemize{
-#' \item{BPLS}{No additional structure assumed; set \code{model.type=standard}. This model mimics the standard partial least squares regression (PLS; Wold, 1973)}
-#' \item{ss-BPLS}{A spike-and-slab variant introducing additonal column-wise sparsity to the loading matrix relating to the response variables \code{Y}; set \code{model.type=ss}. This approach mimics the Two-way Orthogonal PLS regression (O2PLS; Trygg and Wold, 2003).}
-#' \item{L-BPLS}{A LASSO variant introducing additonal element-wise sparsity to the loading matrix relating to the response variables \code{Y}; set \code{model.type=LASSO}. This approach mimics the sparse PLS regression (sPLS; Chun and Keles, 2010).}
-#' }
+#' * **BPLS**: No additional structure assumed; set \code{model.type=standard}. This model mimics the standard partial least squares regression (PLS; Wold, 1973).
+#' * **ss-BPLS**: A spike-and-slab variant introducing additonal column-wise sparsity to the loading matrix relating to the response variables \code{Y}; set \code{model.type=ss}. This approach mimics the Two-way Orthogonal PLS regression (O2PLS; Trygg and Wold, 2003).
+#' * **L-BPLS**: A LASSO variant introducing additonal element-wise sparsity to the loading matrix relating to the response variables \code{Y}; set \code{model.type=LASSO}. This approach mimics the sparse PLS regression (sPLS; Chun and Keles, 2010).
+#'
 #' Empirical comparisons in Urbas et al. (2024) suggest that the LASSO variant is the best at point predictions and prediction interval coverage when applied to spectral data.
-#' @references #' Bhattacharya, A. and Dunson, D. B. (2011) Sparse Bayesian infinite factor models, \emph{Biometrika}, 98(2): 291–306
+#' @references Bhattacharya, A. and Dunson, D. B. (2011) Sparse Bayesian infinite factor models, \emph{Biometrika}, 98(2): 291–306
+#'
 #' Chun, H. and Keles, S. (2010). Sparse partial least squares regression for simultaneous dimension reduction and variable selection. \emph{Journal of the Royal Statistical Society: Series B (Statistical Methodology)}, 72(1):3–25.
+#'
 #' Trygg, J. and Wold, S. (2003). O2-PLS, a two-block (X–Y) latent variable regression (LVR) method with an integral OSC filter. \emph{Journal of Chemometrics}, 17(1):53–64.
+#'
 #' Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." \emph{The Annals of Applied Statistics}, 18(4): 3486-3506. <\doi{10.1214/24-AOAS1947}>
+#'
 #' Wold, H. (1973). Nonlinear iterative partial least squares (NIPALS) modelling: some current developments. In \emph{Multivariate analysis–III}, pages 383–407. Elsevier.
 #' @return A list of:
 #' \item{\code{chain}}{A Markov chain of samples from the parameter posterior.}
@@ -41,31 +44,31 @@
 #' @examples
 #' \donttest{
 #' # data(milk_MIR)
-#' # X = milk_MIR$xMIR
-#' # Y = milk_MIR$yTraits[, c('Casein_content','Fat_content')]
+#' X = milk_MIR$xMIR
+#' Y = milk_MIR$yTraits[, c('Casein_content','Fat_content')]
 #' 
-#' # set.seed(1)
-#' # # fit model to 75% of data and predict on remaining 25%
-#' # idx = sample(seq(nrow(X)),floor(nrow(X)*0.75),replace = FALSE)
+#' set.seed(1)
+#' # fit model to 25% of data and predict on remaining 75%
+#' idx = sample(seq(nrow(X)),floor(nrow(X)*0.25),replace = FALSE)
 #'
-#' # Xtrain = X[idx,];Ytrain = Y[idx,]
-#' # Xtest = X[-idx,];Ytest = Y[-idx,]
+#' Xtrain = X[idx,];Ytrain = Y[idx,]
+#' Xtest = X[-idx,];Ytest = Y[-idx,]
 #'
-#' # # fit the model (MCMC takes time)
-#' # bplsr_Fit = bplsr(Xtrain,Ytrain)
+#' # fit the model (for default MCMC settings leave Qs and N_MCMC blank; can take longer)
+#' bplsr_Fit = bplsr(Xtrain,Ytrain, Qs = 10, N_MCMC = 5000)
 #'
-#' # # generate predictions
-#' # bplsr_pred = bplsr.predict(model = bplsr_Fit, newdata = Xtest)
+#' # generate predictions
+#' bplsr_pred = bplsr.predict(model = bplsr_Fit, newdata = Xtest)
 #'
-#' # # point predictions
-#' # head(bplsr_pred$Ytest)
+#' # point predictions
+#' head(bplsr_pred$Ytest)
 #'
-#' # # lower and upper limits of prediction interval
-#' # head(bplsr_pred$Ytest_PI)
+#' # lower and upper limits of prediction interval
+#' head(bplsr_pred$Ytest_PI)
 #'
-#' # # plot of predictive posterior distribution for single test sample
-#' # hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = F,
-#' #      main = 'Posterior predictive density', xlab = 'Casein_content')}
+#' # plot of predictive posterior distribution for single test sample
+#' hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = FALSE,
+#'      main = 'Posterior predictive density', xlab = 'Casein_content')}
 bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 						 BURN = ceiling(0.3*N_MCMC), Thin = 1, model.type = 'standard',
 						 scale. = TRUE, center. = TRUE, PredInterval = 0.95){
@@ -120,13 +123,41 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 #' @param model Output of \code{bplsr}.
 #' @param newdata Matrix of predictor variables to predict for. 
 #' @param PredInterval Intended coverage of prediction intervals (between 0 and 1). Setting the value to 0 only produces point predictions without prediction intervals.
-#' @details Predictions of the responses are generated from the posterior predictive distribution, marginalising out the model parameters; see Section 3.5 of Urbas et Al. (2024+).
+#' @details Predictions of the responses are generated from the posterior predictive distribution, marginalising out the model parameters; see Section 3.5 of Urbas et al. (2024).
 #' @references Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." \emph{The Annals of Applied Statistics}, 18(4): 3486-3506. <\doi{10.1214/24-AOAS1947}>
 #' @return A list of:
 #' \item{\code{Ytest}}{Point predictions for new responses; if \code{Xtest} is provided.}
 #' \item{\code{Ytest_PI}}{Prediction intervals for new responses (by default 0.95 coverage); if \code{Xtest} is provided.}
 #' \item{\code{Ytest_dist}}{Posterior predictive distributions for new responses; if \code{Xtest} is provided.}
 #' @export
+#' @examples
+#' \donttest{
+#' # data(milk_MIR)
+#' X = milk_MIR$xMIR
+#' Y = milk_MIR$yTraits[, c('Casein_content','Fat_content')]
+#' 
+#' set.seed(1)
+#' # fit model to 25% of data and predict on remaining 75%
+#' idx = sample(seq(nrow(X)),floor(nrow(X)*0.25),replace = FALSE)
+#'
+#' Xtrain = X[idx,];Ytrain = Y[idx,]
+#' Xtest = X[-idx,];Ytest = Y[-idx,]
+#'
+#' # fit the model (for default MCMC settings leave Qs and N_MCMC blank; can take longer)
+#' bplsr_Fit = bplsr(Xtrain,Ytrain, Qs = 10, N_MCMC = 5000)
+#'
+#' # generate predictions
+#' bplsr_pred = bplsr.predict(model = bplsr_Fit, newdata = Xtest)
+#'
+#' # point predictions
+#' head(bplsr_pred$Ytest)
+#'
+#' # lower and upper limits of prediction interval
+#' head(bplsr_pred$Ytest_PI)
+#'
+#' # plot of predictive posterior distribution for single test sample
+#' hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = FALSE,
+#'      main = 'Posterior predictive density', xlab = 'Casein_content')}
 bplsr.predict = function(model, newdata, PredInterval = 0.95){
 	Xtest = as.matrix(newdata)
 	Xtest. = scale(Xtest, center=model$standards$muX,scale = model$standards$sdX)

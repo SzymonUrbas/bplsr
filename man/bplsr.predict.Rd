@@ -23,7 +23,36 @@ A list of:
 Generates predictions from the fitted BPLS regression model using Monte Carlo simulation.
 }
 \details{
-Predictions of the responses are generated from the posterior predictive distribution, marginalising out the model parameters; see Section 3.5 of Urbas et Al. (2024+).
+Predictions of the responses are generated from the posterior predictive distribution, marginalising out the model parameters; see Section 3.5 of Urbas et al. (2024).
+}
+\examples{
+\donttest{
+# data(milk_MIR)
+X = milk_MIR$xMIR
+Y = milk_MIR$yTraits[, c('Casein_content','Fat_content')]
+
+set.seed(1)
+# fit model to 25\% of data and predict on remaining 75\%
+idx = sample(seq(nrow(X)),floor(nrow(X)*0.25),replace = FALSE)
+
+Xtrain = X[idx,];Ytrain = Y[idx,]
+Xtest = X[-idx,];Ytest = Y[-idx,]
+
+# fit the model (for default MCMC settings leave Qs and N_MCMC blank; can take longer)
+bplsr_Fit = bplsr(Xtrain,Ytrain, Qs = 10, N_MCMC = 5000)
+
+# generate predictions
+bplsr_pred = bplsr.predict(model = bplsr_Fit, newdata = Xtest)
+
+# point predictions
+head(bplsr_pred$Ytest)
+
+# lower and upper limits of prediction interval
+head(bplsr_pred$Ytest_PI)
+
+# plot of predictive posterior distribution for single test sample
+hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = FALSE,
+     main = 'Posterior predictive density', xlab = 'Casein_content')}
 }
 \references{
 Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." \emph{The Annals of Applied Statistics}, 18(4): 3486-3506. \if{html}{\out{<\doi{10.1214/24-AOAS1947}>}}

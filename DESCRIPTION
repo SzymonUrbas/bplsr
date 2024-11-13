@@ -1,8 +1,8 @@
 Package: bplsr
 Title: Bayesian partial least squares regression
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
-    person("Szymon", "Urbas", , "szymon.urbas@umu.ie", role = c("aut", "cre")),
+    person("Szymon", "Urbas", , "szymon.urbas@mu.ie", role = c("aut", "cre")),
     person("Pierre", "Lovera", role = "ctb"),
     person("Robert", "Daly", role = "ctb"),
     person("Alan", "O'Riordan", role = "ctb"),
