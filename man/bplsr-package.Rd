@@ -8,7 +8,7 @@
 Fits the Bayesian partial least squares regression model introduced in Urbas et al. (2024) \doi{10.1214/24-AOAS1947}. Suitable for univariate and multivariate regression with high-dimensional data.
 }
 \author{
-\strong{Maintainer}: Szymon Urbas \email{szymon.urbas@umu.ie}
+\strong{Maintainer}: Szymon Urbas \email{szymon.urbas@mu.ie}
 
 Other contributors:
 \itemize{
