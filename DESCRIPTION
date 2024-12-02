@@ -1,6 +1,6 @@
 Package: bplsr
 Title: Bayesian partial least squares regression
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
     person("Szymon", "Urbas", , "szymon.urbas@mu.ie", role = c("aut", "cre")),
     person("Pierre", "Lovera", role = "ctb"),
@@ -15,7 +15,7 @@ Description: Fits the Bayesian partial least squares regression model
     for univariate and multivariate regression with high-dimensional data.
 License: GPL (>= 3)
 Encoding: UTF-8
-Language: eng
+Language: en
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Depends: 
