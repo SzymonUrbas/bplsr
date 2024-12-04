@@ -311,7 +311,6 @@ BPLS_mcmc_kernel=function(X, Y, pars, Prior){
 		pars$Psi2=rep(1/rgamma(1,Prior$Apsi+N*R/2,Prior$Bpsi + 0.5 *sum(( Y - pars$Z%*% t(pars$C))^2)),R)
 	} else {
 		pars$Psi2=1/rgamma(R,Prior$Apsi+N/2,Prior$Bpsi + 0.5 *colSums(( Y - pars$Z %*%t(pars$C))^2))
-	# Psi2curr=1/rgamma(R,Apsi+N/2,Bsig + 0.5 *colSums(( Y - Zcurr %*%Bcurr%*% t(Ccurr)))^2)
 	}
 
 	# Shrinkage
