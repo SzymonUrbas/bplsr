@@ -257,17 +257,17 @@ bplsrMCMC = function(X,Y, Xtest = NULL, Prior = NULL, N_MCMC = 1e3, BURN = 0.3*N
 
 		tmp_list = bplsr.predict(list(chain = StorePars, standards = standards),
 						Xtest,PredInterval = PredInterval)
-		EYtest = tmp_list$Ytest
+		Ytest = tmp_list$Ytest
 		Ytest_PI = tmp_list$Ytest_PI
 		storeY = tmp_list$Ytest_dist
 	} else{
-		EYtest = NULL
+		Ytest = NULL
 		Ytest_PI = NULL
 		storeY = NULL
 		storeEY = NULL
 		ess = NULL
 	}
-	return(list(chain = StorePars, Ytest = EYtest, Ytest_PI = Ytest_PI, Ytest_dist = storeY,
+	return(list(chain = StorePars, Ytest = Ytest, Ytest_PI = Ytest_PI, Ytest_dist = storeY,
 	 Xtest = Xtest, diag = list(chain = storeEY, ess = ess)))
 }
 
