@@ -277,10 +277,6 @@ BPLS_mcmc_kernel=function(X, Y, pars, Prior){
 	P = ncol(X)
 	R = ncol(Y)
 
-
-	# Sinv =I_Qs + crossprod(W, W /Sig2) +
-	# 			crossprod(C, C /Psi2) #t(C)%*%PSIinv %*%C
-
 	S = solve(pars$I_Qs + crossprod(pars$W, pars$W /pars$Sig2)+crossprod(pars$C, pars$C /pars$Psi2))
 
 	pars$Z = (X%*%( pars$W /pars$Sig2) + Y%*%(pars$C /pars$Psi2))%*%S + matrix(rnorm(N*pars$Qs),nrow = N)%*%chol(S)
@@ -339,10 +335,6 @@ ssBPLS_mcmc_kernel=function(X, Y, pars, Prior){
 	N = nrow(X)
 	P = ncol(X)
 	R = ncol(Y)
-
-
-	# Sinv =I_Qs + crossprod(W, W /Sig2) +
-	# 			crossprod(C, C /Psi2) #t(C)%*%PSIinv %*%C
 
 	S = solve(pars$I_Qs + crossprod(pars$W, pars$W /pars$Sig2)+crossprod(pars$CB, pars$CB /pars$Psi2))
 
@@ -407,7 +399,6 @@ ssBPLS_mcmc_kernel=function(X, Y, pars, Prior){
 		pars$Psi2=rep(1/rgamma(1,Prior$Apsi+N*R/2,Prior$Bpsi + 0.5 *sum(( Y - pars$Z%*% t(pars$CB))^2)),R)
 	} else {
 		pars$Psi2=1/rgamma(R,Prior$Apsi+N/2,Prior$Bpsi + 0.5 *colSums(( Y - pars$Z %*%t(pars$CB))^2))
-	# Psi2curr=1/rgamma(R,Apsi+N/2,Bsig + 0.5 *colSums(( Y - Zcurr %*%Bcurr%*% t(Ccurr)))^2)
 	}
 
 	# Shrinkage
@@ -436,10 +427,6 @@ LBPLS_mcmc_kernel=function(X, Y, pars, Prior){
 	N = nrow(X)
 	P = ncol(X)
 	R = ncol(Y)
-
-
-	# Sinv =I_Qs + crossprod(W, W /Sig2) +
-	# 			crossprod(C, C /Psi2) #t(C)%*%PSIinv %*%C
 
 	S = solve(pars$I_Qs + crossprod(pars$W, pars$W /pars$Sig2)+crossprod(pars$C, pars$C /pars$Psi2))
 
@@ -472,7 +459,6 @@ LBPLS_mcmc_kernel=function(X, Y, pars, Prior){
 		pars$Psi2=rep(1/rgamma(1,Prior$Apsi+N*R/2,Prior$Bpsi + 0.5 *sum(( Y - pars$Z%*% t(pars$C))^2)),R)
 	} else {
 		pars$Psi2=1/rgamma(R,Prior$Apsi+N/2,Prior$Bpsi + 0.5 *colSums(( Y - pars$Z %*%t(pars$C))^2))
-	# Psi2curr=1/rgamma(R,Apsi+N/2,Bsig + 0.5 *colSums(( Y - Zcurr %*%Bcurr%*% t(Ccurr)))^2)
 	}
 
 	# Shrinkage
@@ -562,7 +548,6 @@ INITbplsr = function(X, Y, Prior,Qs = 0, isoX = FALSE, isoY = FALSE,
 	if(Qs==0){
       Qs = min(which(cx>=0.95))
     }
-    # print(Qs)
     W = pcaX$rotation[,1:Qs]
     Sig2 = rep(mean(pcaX$sdev[-(1:Qs)])^2,P)
     # SIGMAinv = diag(1/Sig2)
@@ -598,7 +583,6 @@ INITbplsr = function(X, Y, Prior,Qs = 0, isoX = FALSE, isoY = FALSE,
     	Bvec = rep(1, Qs)
     	CB = C
     	# CB[,Bvec==0] = 0
-
 
     	phiW= rgamma(P*Qs,Prior$nuW[1],Prior$nuW[2]); 
     	phiC = rgamma(R*Qs,Prior$nuC[1],Prior$nuC[2])
