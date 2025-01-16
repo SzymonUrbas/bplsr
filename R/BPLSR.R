@@ -626,7 +626,11 @@ INITbplsr = function(X, Y, Prior,Qs = 0, isoX = FALSE, isoY = FALSE,
 }
 
 InvScale = function(X, center. , scale.){
-	Xnew = t(apply(X,1, function(x){x*scale. + center.}))
+	if((ncol(X)==1) & (length(center.)==1) & (length(scale.)==1)){
+		Xnew = X*scale. + center.
+	} else {
+		Xnew = t(apply(X,1, function(x){x*scale. + center.}))
+	}
 	colnames(Xnew) = colnames(X)
 	return(Xnew)
 }
