@@ -159,7 +159,7 @@ bplsr = function(X,Y, Xtest = NULL, Prior = NULL, Qs = NULL, N_MCMC = 2e4,
 #' hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = FALSE,
 #'      main = 'Posterior predictive density', xlab = 'Casein_content')}
 bplsr.predict = function(model, newdata, PredInterval = 0.95){
-	print('predicting')
+	message('predicting')
 	Xtest = as.matrix(newdata)
 	Xtest. = scale(Xtest, center=model$standards$muX,scale = model$standards$sdX)
 	R = nrow(model$chain[[1]]$C)
@@ -178,7 +178,7 @@ bplsr.predict = function(model, newdata, PredInterval = 0.95){
 				 center. = model$standards$muY, scale. = model$standards$sdY)
 		pb$tick()
 	}
-	print('predicting1')
+	message('predicting1')
 	dimnames(storeY)[[2]] = model$standards$namesY
 
 	EYtest = InvScale(EYtmp/length(model$chain),
@@ -190,7 +190,7 @@ bplsr.predict = function(model, newdata, PredInterval = 0.95){
 		for(n in seq(nrow(Xtest.))){
 			Ytest_PI[n,,] = t(apply(storeY[n,,,drop = FALSE],1,quantile, probs = c(half_alpha,1-half_alpha)))
 		}
-		print('predicting2')
+		message('predicting2')
 		dimnames(Ytest_PI)[[2]] = model$standards$namesY
 		dimnames(Ytest_PI)[[3]] = c(paste0(half_alpha*100,"%"),paste0((1-half_alpha)*100,"%"))
 	} else{
