@@ -185,7 +185,7 @@ bplsr.predict = function(model, newdata, PredInterval = 0.95){
 		half_alpha = 0.5*(1-PredInterval)
 		Ytest_PI = array(NA, dim = c(nrow(Xtest.),R,2))
 		for(n in seq(nrow(Xtest.))){
-			Ytest_PI[n,,] = t(apply(storeY[n,,],1,quantile, probs = c(half_alpha,1-half_alpha)))
+			Ytest_PI[n,,] = t(apply(storeY[n,,,drop = FALSE],1,quantile, probs = c(half_alpha,1-half_alpha)))
 		}
 
 		dimnames(Ytest_PI)[[2]] = model$standards$namesY
