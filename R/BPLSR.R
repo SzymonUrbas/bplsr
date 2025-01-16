@@ -178,6 +178,7 @@ bplsr.predict = function(model, newdata, PredInterval = 0.95){
 		pb$tick()
 	}
 	dimnames(storeY)[[2]] = model$standards$namesY
+	
 	EYtest = InvScale(EYtmp/length(model$chain),
 				 center. = model$standards$muY, scale. = model$standards$sdY)
 
