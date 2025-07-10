@@ -225,6 +225,7 @@ bplsrMCMC = function(X,Y, Xtest = NULL, Prior = NULL, N_MCMC = 1e3, BURN = 0.3*N
 	pars$model = model.type
 
 	StoreIdx = seq(BURN+1, N_MCMC, Thin)
+	if(tail(StoreIdx,1)<N_MCMC){StoreIdx = c(StoreIdx,N_MCMC)}
 	Counter = 1
 
 	StorePars = rep(list(ReducePars(pars)),length(StoreIdx))
