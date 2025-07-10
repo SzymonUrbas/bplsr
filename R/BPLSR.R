@@ -178,6 +178,7 @@ bplsr.predict = function(model, newdata, PredInterval = 0.95){
 		pb$tick()
 	}
 	dimnames(storeY)[[2]] = model$standards$namesY
+
 	EYtest = InvScale(EYtmp/length(model$chain),
 				 center. = model$standards$muY, scale. = model$standards$sdY)
 
@@ -187,7 +188,6 @@ bplsr.predict = function(model, newdata, PredInterval = 0.95){
 		for(n in seq(nrow(Xtest.))){
 			Ytest_PI[n,,] = t(apply(storeY[n,,,drop = FALSE],1,quantile, probs = c(half_alpha,1-half_alpha)))
 		}
-
 		dimnames(Ytest_PI)[[2]] = model$standards$namesY
 		dimnames(Ytest_PI)[[3]] = c(paste0(half_alpha*100,"%"),paste0((1-half_alpha)*100,"%"))
 	} else{
