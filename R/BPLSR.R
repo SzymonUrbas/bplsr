@@ -469,7 +469,7 @@ LBPLS_mcmc_kernel=function(X, Y, pars, Prior){
 	meanPhiC = sqrt(pars$L2_lasso) / ( abs(pars$C)%*%diag(sqrt(pars$tauWC)) )
 	pars$phiC = matrix(statmod::rinvgauss(R*pars$Qs,mean = as.vector(meanPhiC), shape  = pars$L2_lasso),
 		nrow = R,ncol = pars$Qs)
-	L2_lasso = rgamma(1,Prior$Alam + pars$Qs*R,Prior$Blam + 0.5*sum(1/pars$phiC))
+	pars$L2_lasso = rgamma(1,Prior$Alam + pars$Qs*R,Prior$Blam + 0.5*sum(1/pars$phiC))
 
 
 	sum_phiW_W2 = colSums(pars$phiW*pars$W^2)
