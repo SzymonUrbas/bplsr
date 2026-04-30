@@ -6,93 +6,47 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The `bplsr` package implements the Bayesian partial least squares
-regression model. It is a Bayesian factor model which emulates the
-partial least squares (PLS) method. See Urbas et al. (2024) for details.
+The goal of bplsr is to …
 
 ## Installation
 
-Installing from CRAN:
+You can install the development version of bplsr from
+[GitHub](https://github.com/) with:
 
 ``` r
-install.packages('bplsr')
-```
-
-Installing directly from GitHub:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("SzymonUrbas/bplsr")
+# install.packages("pak")
+pak::pak("SzymonUrbas/bplsr")
 ```
 
 ## Example
 
-The following example illustrates how to carry out multivariate
-regression using BPLS on mid-infrared spectral data of milk samples:
+This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(bplsr)
-
-
-X = milk_MIR$xMIR
-Y = milk_MIR$yTraits[, c('Casein_content','Fat_content')]
-
-set.seed(1)
-# fit model to 75% of data and predict on remaining 25%
-idx = sample(seq(nrow(X)),floor(nrow(X)*0.75),replace = FALSE)
-
-Xtrain = X[idx,];Ytrain = Y[idx,]
-Xtest = X[-idx,];Ytest = Y[-idx,]
-
-# fit the model (MCMC takes time)
-bplsr_Fit = bplsr(Xtrain,Ytrain)
-
-# generate predictions
-bplsr_pred = bplsr.predict(model = bplsr_Fit, newdata = Xtest)
-
-# point predictions
-head(bplsr_pred$Ytest)
-#>    Casein_content Fat_content
-#> 5        3.142232    3.908393
-#> 6        2.557213    4.109032
-#> 7        2.739213    4.959536
-#> 8        2.949198    5.058209
-#> 9        2.773001    4.276898
-#> 10       2.703331    4.500888
-
-# lower and upper limits of prediction interval
-head(bplsr_pred$Ytest_PI)
-#> , , 2.5%
-#> 
-#>      Casein_content Fat_content
-#> [1,]       2.870193    4.541164
-#> [2,]       2.290815    4.750810
-#> [3,]       2.475776    5.609996
-#> [4,]       2.682534    5.701886
-#> [5,]       2.501107    4.913358
-#> [6,]       2.433394    5.143978
-#> 
-#> , , 97.5%
-#> 
-#>      Casein_content Fat_content
-#> [1,]       2.870193    4.541164
-#> [2,]       2.290815    4.750810
-#> [3,]       2.475776    5.609996
-#> [4,]       2.682534    5.701886
-#> [5,]       2.501107    4.913358
-#> [6,]       2.433394    5.143978
-
-# plot of predictive posterior distribution for single test sample
-hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = F,
-     main = 'Posterior predictive distribution', xlab = 'Casein_content')
+## basic example code
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+What is special about using `README.Rmd` instead of just `README.md`?
+You can include R chunks like so:
 
-### References
+``` r
+summary(cars)
+#>      speed           dist       
+#>  Min.   : 4.0   Min.   :  2.00  
+#>  1st Qu.:12.0   1st Qu.: 26.00  
+#>  Median :15.0   Median : 36.00  
+#>  Mean   :15.4   Mean   : 42.98  
+#>  3rd Qu.:19.0   3rd Qu.: 56.00  
+#>  Max.   :25.0   Max.   :120.00
+```
 
-Urbas, S., Lovera, P., Daly, R., O’Riordan, A., Berry, D., and Gormley,
-I. C. (2024). “Predicting milk traits from spectral data using Bayesian
-probabilistic partial least squares regression.” *The Annals of Applied
-Statistics*, 18(4): 3486-3506
-[doi:10.1214/24-AOAS1947](https://doi.org/10.1214/24-AOAS1947)
+You’ll still need to render `README.Rmd` regularly, to keep `README.md`
+up-to-date. `devtools::build_readme()` is handy for this.
+
+You can also embed plots, for example:
+
+<img src="man/figures/README-pressure-1.png" alt="" width="100%" />
+
+In that case, don’t forget to commit and push the resulting figure
+files, so they display on GitHub and CRAN.

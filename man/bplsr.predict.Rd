@@ -55,5 +55,5 @@ hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = FALSE,
      main = 'Posterior predictive density', xlab = 'Casein_content')}
 }
 \references{
-Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." \emph{The Annals of Applied Statistics}, 18(4): 3486-3506. \if{html}{\out{<\doi{10.1214/24-AOAS1947}>}}
+Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." \emph{The Annals of Applied Statistics}, 18(4): 3486-3506.
 }

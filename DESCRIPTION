@@ -1,6 +1,6 @@
 Package: bplsr
 Title: Bayesian partial least squares regression
-Version: 1.0.4
+Version: 1.0.5
 Authors@R: c(
     person("Szymon", "Urbas", , "szymon.urbas@mu.ie", role = c("aut", "cre")),
     person("Pierre", "Lovera", role = "ctb"),
@@ -17,7 +17,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 Language: en
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Depends: 
     R (>= 3.5)
 LazyData: true
