@@ -18,38 +18,57 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of bplsr is to ...
+The `bplsr` package implements the Bayesian partial least squares regression model. It is a Bayesian factor model which emulates the partial least squares (PLS) method. See Urbas et al. (2024) for details.
 
 ## Installation
 
-You can install the development version of bplsr from [GitHub](https://github.com/) with:
+Installing from CRAN:
+```{r, eval=FALSE}
+install.packages('bplsr')
+```
 
+Installing directly from GitHub:
 ``` r
-# install.packages("pak")
-pak::pak("SzymonUrbas/bplsr")
+# install.packages("devtools")
+devtools::install_github("SzymonUrbas/bplsr")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+The following example illustrates how to carry out multivariate regression using BPLS on mid-infrared spectral data of milk samples:
 
 ```{r example}
 library(bplsr)
-## basic example code
+
+
+X = milk_MIR$xMIR
+Y = milk_MIR$yTraits[, c('Casein_content','Fat_content')]
+
+set.seed(1)
+# fit model to 75% of data and predict on remaining 25%
+idx = sample(seq(nrow(X)),floor(nrow(X)*0.75),replace = FALSE)
+
+Xtrain = X[idx,];Ytrain = Y[idx,]
+Xtest = X[-idx,];Ytest = Y[-idx,]
+
+# fit the model (MCMC takes time)
+bplsr_Fit = bplsr(Xtrain,Ytrain)
+
+# generate predictions
+bplsr_pred = bplsr.predict(model = bplsr_Fit, newdata = Xtest)
+
+# point predictions
+head(bplsr_pred$Ytest)
+
+# lower and upper limits of prediction interval
+head(bplsr_pred$Ytest_PI)
+
+# plot of predictive posterior distribution for single test sample
+hist(bplsr_pred$Ytest_dist[1,'Casein_content',], freq = F,
+     main = 'Posterior predictive distribution', xlab = 'Casein_content')
+
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+### References
+Urbas, S., Lovera, P., Daly, R., O'Riordan, A., Berry, D., and Gormley, I. C. (2024). "Predicting milk traits from spectral data using Bayesian probabilistic partial least squares regression." _The Annals of Applied Statistics_, 18(4): 3486-3506 [doi:10.1214/24-AOAS1947](https://doi.org/10.1214/24-AOAS1947)
