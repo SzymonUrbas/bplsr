@@ -10,6 +10,11 @@ Fits the Bayesian partial least squares regression model introduced in Urbas et 
 \author{
 \strong{Maintainer}: Szymon Urbas \email{szymon.urbas@mu.ie}
 
+Authors:
+\itemize{
+  \item Szymon Urbas \email{szymon.urbas@mu.ie}
+}
+
 Other contributors:
 \itemize{
   \item Pierre Lovera [contributor]
